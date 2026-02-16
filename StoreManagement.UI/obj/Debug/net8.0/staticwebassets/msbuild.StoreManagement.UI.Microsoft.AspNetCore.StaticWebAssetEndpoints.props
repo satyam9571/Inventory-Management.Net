@@ -1,0 +1,16 @@
+﻿<Project>
+  <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/StoreManagement.UI/css/pagecss/landingpage.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\pagecss\landingpage.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-uIZDt07H\u002BXbix\u002BhxpQ1Sqxik6uHTzwf18ANwSh9TGng="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"2001"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022uIZDt07H\u002BXbix\u002BhxpQ1Sqxik6uHTzwf18ANwSh9TGng=\u0022"},{"Name":"Last-Modified","Value":"Fri, 13 Feb 2026 11:19:57 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/StoreManagement.UI/css/pagecss/landingpage.cz5o58gonu.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\pagecss\landingpage.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"cz5o58gonu"},{"Name":"integrity","Value":"sha256-uIZDt07H\u002BXbix\u002BhxpQ1Sqxik6uHTzwf18ANwSh9TGng="},{"Name":"label","Value":"_content/StoreManagement.UI/css/pagecss/landingpage.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"2001"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022uIZDt07H\u002BXbix\u002BhxpQ1Sqxik6uHTzwf18ANwSh9TGng=\u0022"},{"Name":"Last-Modified","Value":"Fri, 13 Feb 2026 11:19:57 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+  </ItemGroup>
+</Project>

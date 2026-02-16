@@ -1,0 +1,218 @@
+﻿@using StoreManagement.Core.DTOs
+@model IEnumerable<CategoryDto>
+
+@{
+    ViewData["Title"] = "Category Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <style>
+        .page-card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+        }
+    </style>
+}
+
+<div class="mb-4">
+    <h3 class="fw-semibold">
+        <i class="bi bi-tags-fill text-primary me-2"></i>
+        Category Management
+    </h3>
+</div>
+
+<div class="page-card mb-4">
+    <div class="row g-3 align-items-end">
+
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Category Name</label>
+            <input type="hidden" id="catId" />
+            <input type="text" id="catName" class="form-control" placeholder="Enter category name" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Description</label>
+            <input type="text" id="catDesc" class="form-control" placeholder="Enter description" />
+        </div>
+
+        <div class="col-md-2">
+            <button id="saveBtn" class="btn btn-primary w-100" onclick="saveCategory()">
+                <i class="bi bi-save me-1"></i> Save
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<div class="page-card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th class="text-center" style="width:120px;">Action</th>
+                </tr>
+            </thead>
+            <tbody id="categoryTable"></tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        let allData = [];
+        let currentPage = 1;
+        let pageSize = 5;
+        document.addEventListener("DOMContentLoaded", loadCategories);
+
+        function loadCategories() {
+            fetch('/Category/GetAll')
+            .then(res => res.json())
+            .then(data => {
+                let rows = "";
+                data.forEach(item => {
+
+                    const safeName = item.name ? item.name.replace(/'/g, "\\'") : "";
+                    const safeDesc = item.description ? item.description.replace(/'/g, "\\'") : "";
+
+                    rows += `
+                        <tr>
+                            <td>${item.id}</td>
+                            <td class="fw-semibold">${item.name}</td>
+                            <td>${item.description ?? ''}</td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button class="btn btn-outline-warning btn-sm action-btn"
+                                        onclick="edit(${item.id}, '${safeName}', '${safeDesc}')">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm action-btn"
+                                        onclick="deleteCategory(${item.id})">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                document.getElementById("categoryTable").innerHTML = rows;
+            });
+        }
+
+        function saveCategory() {
+
+            const btn = document.getElementById("saveBtn");
+
+            const dto = {
+                id: parseInt(document.getElementById("catId").value) || 0,
+                name: document.getElementById("catName").value.trim(),
+                description: document.getElementById("catDesc").value.trim()
+            };
+
+            if (!dto.name) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Validation Error',
+                    text: 'Category name is required!'
+                });
+                return;
+            }
+
+            btn.disabled = true;
+
+            fetch('/Category/Save', {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dto)
+            })
+            .then(res => res.json())
+            .then(data => {
+
+                btn.disabled = false;
+
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Saved!',
+                        text: 'Category saved successfully',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+                    clearForm();
+                    loadCategories();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+
+        function edit(id, name, desc) {
+            document.getElementById("catId").value = id;
+            document.getElementById("catName").value = name;
+            document.getElementById("catDesc").value = desc;
+        }
+
+        function deleteCategory(id) {
+
+            Swal.fire({
+                title: 'Are you sure?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    fetch('/Category/Delete?id=' + id, {
+                        method: "DELETE"
+                    })
+                    .then(res => res.json())
+                    .then(() => {
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        loadCategories();
+                    });
+                }
+            });
+        }
+
+        function clearForm() {
+            document.getElementById("catId").value = "";
+            document.getElementById("catName").value = "";
+            document.getElementById("catDesc").value = "";
+        }
+
+    </script>
+}

@@ -1,0 +1,226 @@
+﻿@{
+    ViewData["Title"] = "Brand Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <style>
+        .page-card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+        }
+
+        .action-btn {
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+        }
+    </style>
+}
+
+<div class="mb-4">
+    <h3 class="fw-semibold">
+        <i class="bi bi-award-fill text-primary me-2"></i>
+        Brand Management
+    </h3>
+</div>
+
+<div class="page-card mb-4">
+    <div class="row g-3 align-items-end">
+
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Brand Name</label>
+            <input type="hidden" id="brandId" />
+            <input type="text" id="brandName" class="form-control" placeholder="Enter brand name" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Category</label>
+            <select id="categoryId" class="form-select">
+                <option value="">Select Category</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button id="saveBtn" class="btn btn-primary w-100" onclick="saveBrand()">
+                <i class="bi bi-save me-1"></i> Save
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<div class="page-card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th class="text-center" style="width:120px;">Action</th>
+                </tr>
+            </thead>
+            <tbody id="brandTable"></tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            loadCategories();
+            loadBrands();
+        });
+
+        function loadCategories() {
+            fetch('/Category/GetAll')
+            .then(res => res.json())
+            .then(data => {
+                let options = '<option value="">Select Category</option>';
+                data.forEach(item => {
+                    options += `<option value="${item.id}">${item.name}</option>`;
+                });
+                document.getElementById("categoryId").innerHTML = options;
+            });
+        }
+
+        function loadBrands() {
+            fetch('/Brand/GetAll')
+            .then(res => res.json())
+            .then(data => {
+                let rows = "";
+                data.forEach(item => {
+
+                    const safeName = item.name ? item.name.replace(/'/g, "\\'") : "";
+
+                    rows += `
+                        <tr>
+                            <td>${item.id}</td>
+                            <td class="fw-semibold">${item.name}</td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button class="btn btn-outline-warning btn-sm action-btn"
+                                        onclick="editBrand(${item.id}, '${safeName}', ${item.category_id})">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm action-btn"
+                                        onclick="deleteBrand(${item.id})">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                document.getElementById("brandTable").innerHTML = rows;
+            });
+        }
+
+        function saveBrand() {
+
+            const btn = document.getElementById("saveBtn");
+
+            const dto = {
+                id: parseInt(document.getElementById("brandId").value) || 0,
+                name: document.getElementById("brandName").value.trim(),
+                category_id: parseInt(document.getElementById("categoryId").value)
+            };
+
+            if (!dto.name || !dto.category_id) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Validation Error',
+                    text: 'Brand name and Category are required!'
+                });
+                return;
+            }
+
+            btn.disabled = true;
+
+            fetch('/Brand/Save', {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dto)
+            })
+            .then(res => res.json())
+            .then(data => {
+
+                btn.disabled = false;
+
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Saved!',
+                        text: 'Brand saved successfully',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+                    clearForm();
+                    loadBrands();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+
+        function editBrand(id, name, categoryId) {
+            document.getElementById("brandId").value = id;
+            document.getElementById("brandName").value = name;
+            document.getElementById("categoryId").value = categoryId;
+        }
+
+        function deleteBrand(id) {
+
+            Swal.fire({
+                title: 'Are you sure?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    fetch('/Brand/Delete?id=' + id, {
+                        method: "DELETE"
+                    })
+                    .then(res => res.json())
+                    .then(() => {
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        loadBrands();
+                    });
+                }
+            });
+        }
+
+        function clearForm() {
+            document.getElementById("brandId").value = "";
+            document.getElementById("brandName").value = "";
+            document.getElementById("categoryId").value = "";
+        }
+
+    </script>
+}
