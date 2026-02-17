@@ -14,7 +14,7 @@ namespace StoreManagement.BAL.Adapter
 
         public StockEntryAdapter(DbContext context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _context = context;
         }
 
         public async Task<IEnumerable<StockEntryDto>> GetAllAsync()
@@ -27,7 +27,7 @@ namespace StoreManagement.BAL.Adapter
                     [entry_type]    AS EntryType,
                     [entry_date]    AS EntryDate,
                     [unit_price]    AS UnitPrice
-                FROM [StoreManagementDB].[dbo].[stock_entries]
+                FROM stock_entries
                 ORDER BY [id] DESC";
 
             using var connection = _context.CreateConnection();
@@ -44,7 +44,7 @@ namespace StoreManagement.BAL.Adapter
                     [entry_type]    AS EntryType,
                     [entry_date]    AS EntryDate,
                     [unit_price]    AS UnitPrice
-                FROM [StoreManagementDB].[dbo].[stock_entries]
+                FROM stock_entries
                 WHERE [id] = @Id";
 
             using var connection = _context.CreateConnection();
@@ -54,7 +54,7 @@ namespace StoreManagement.BAL.Adapter
         public async Task<int> AddAsync(StockEntryDto stockEntry)
         {
             const string query = @"
-                INSERT INTO [StoreManagementDB].[dbo].[stock_entries]
+                INSERT INTO stock_entries
                 (
                     [product_id], [quantity], [entry_type], [entry_date], [unit_price]
                 )
@@ -71,7 +71,7 @@ namespace StoreManagement.BAL.Adapter
         public async Task UpdateAsync(StockEntryDto stockEntry)
         {
             const string query = @"
-                UPDATE [StoreManagementDB].[dbo].[stock_entries]
+                UPDATE stock_entries
                 SET 
                     [product_id]    = @ProductId,
                     [quantity]      = @Quantity,
@@ -86,7 +86,7 @@ namespace StoreManagement.BAL.Adapter
 
         public async Task DeleteAsync(int id)
         {
-            const string query = "DELETE FROM [StoreManagementDB].[dbo].[stock_entries] WHERE [id] = @Id";
+            const string query = "DELETE FROM stock_entries WHERE [id] = @Id";
 
             using var connection = _context.CreateConnection();
             await connection.ExecuteAsync(query, new { Id = id });

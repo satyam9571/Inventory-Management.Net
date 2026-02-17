@@ -86,16 +86,16 @@ namespace StoreManagement.BAL.Adapter
             }
         }
      
-        public async Task<ProductDto?> GetByIdAsync(int id)
-        {
-            string query = "SELECT * FROM products WHERE id = @Id";
+        //public async Task<ProductDto?> GetByIdAsync(int id)
+        //{
+        //    string query = "SELECT * FROM products WHERE id = @Id";
 
-            using (var connection = _context.CreateConnection())
-            {
-                return await connection.QueryFirstOrDefaultAsync<ProductDto>(
-                    query, new { Id = id });
-            }
-        }
+        //    using (var connection = _context.CreateConnection())
+        //    {
+        //        return await connection.QueryFirstOrDefaultAsync<ProductDto>(
+        //            query, new { Id = id });
+        //    }
+        //}
 
         public async Task<ProductDto?> GetByIdProduct(int id)
         {

@@ -210,42 +210,88 @@
             });
 
             // Create New
-            $('#btnCreateNew').on('click', function () {
-                $.ajax({
-                    url: '@Url.Action("Create", "StockEntries")',
-                    type: 'GET',
-                    success: function (data) {
-                        $('#createModalBody').html(data);
-                        $('#createModal').modal('show');
-                        $.validator.unobtrusive.parse('#createForm');
+                   $('#btnCreateNew').on('click', function () {
 
-                        $('#createForm').off('submit').on('submit', function (e) {
-                            e.preventDefault();
-                            $.ajax({
-                                url: '@Url.Action("Create", "StockEntries")',
-                                type: 'POST',
-                                data: $(this).serialize(),
-                                success: function (res) {
-                                    if (res.success) {
-                                        table.row.add(res.data).draw(false);
-                                        Swal.fire('Success!', 'Entry created', 'success');
-                                        $('#createModal').modal('hide');
-                                    } else {
-                                        $('#createModalBody').html(res);
-                                        $.validator.unobtrusive.parse('#createForm');
-                                    }
-                                },
-                                error: function (xhr) {
-                                    Swal.fire('Error', 'Failed to create entry: ' + (xhr.responseJSON?.message || 'Server error'), 'error');
-                                }
-                            });
+            $.ajax({
+                url: '@Url.Action("Create", "StockEntries")',
+                type: 'GET',
+
+                success: function (data) {
+
+                    $('#createModalBody').html(data);
+                    $('#createModal').modal('show');
+
+                    // ✅ Load Products in dropdown
+                    $.get('/Product/GetAll', function (products) {
+
+                        let options = '<option value="">-- Select Product --</option>';
+
+                        products.forEach(p => {
+                            options += `<option value="${p.id}">${p.name}</option>`;
                         });
-                    },
-                    error: function (xhr) {
-                        Swal.fire('Error', 'Cannot load create form: ' + (xhr.status + ' ' + xhr.statusText), 'error');
-                    }
-                });
+
+                        $('#ProductId').html(options);
+                    });
+
+                    // ✅ Enable validation
+                    $.validator.unobtrusive.parse('#createForm');
+
+                    // ✅ Submit Create Form
+                    $('#createForm').off('submit').on('submit', function (e) {
+
+                        e.preventDefault();
+
+                        $.ajax({
+                            url: '@Url.Action("Create", "StockEntries")',
+                            type: 'POST',
+                            data: $(this).serialize(),
+
+                            success: function (res) {
+
+                                if (res.success) {
+
+                                    table.row.add(res.data).draw(false);
+
+                                    Swal.fire(
+                                        'Success!',
+                                        'Entry created successfully',
+                                        'success'
+                                    );
+
+                                    $('#createModal').modal('hide');
+
+                                } else {
+
+                                    $('#createModalBody').html(res);
+                                    $.validator.unobtrusive.parse('#createForm');
+                                }
+                            },
+
+                            error: function (xhr) {
+
+                                Swal.fire(
+                                    'Error',
+                                    'Failed to create entry',
+                                    'error'
+                                );
+                            }
+                        });
+
+                    });
+
+                },
+
+                error: function (xhr) {
+
+                    Swal.fire(
+                        'Error',
+                        'Cannot load create form',
+                        'error'
+                    );
+                }
             });
+
+        });
 
             // Edit
             $('#stockTable tbody').on('click', '.edit-btn', function () {

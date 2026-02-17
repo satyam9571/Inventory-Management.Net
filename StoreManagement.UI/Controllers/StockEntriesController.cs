@@ -24,7 +24,7 @@ namespace StoreManagement.UI.Controllers
        
         [HttpGet]
         public async Task<IActionResult> GetAll()
-        {
+            {
             var entries = await _repository.GetAllAsync();
             return Json(new { data = entries });   // 🔥 wrap inside data
         }
