@@ -10,10 +10,10 @@ namespace StoreManagement.BAL.Interfaces
 {
     public interface ICategoryRepository
     {
-        Task<IEnumerable<CategoryDto>> GetAllAsync();
-        Task<CategoryDto?> GetByIdAsync(int id);
-        Task<int> CreateAsync(CategoryDto dto);
-        Task<int> UpdateAsync(CategoryDto dto);
-        Task<int> DeleteAsync(int id);
+        Task<IEnumerable<CategoryDto>> GetAllCategory();
+        Task<CategoryDto?> GetByIdCategory(int id);
+        Task<int> CreateCategory(CategoryDto dto);
+        Task<int> UpdateCategory(CategoryDto dto);
+        Task<int> DeleteCategory(int id);
     }
 }

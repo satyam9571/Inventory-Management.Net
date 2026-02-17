@@ -5,16 +5,16 @@ using StoreManagement.Core.DTOs;
 
 using System.Data;
 
-public class CategoryRepository : ICategoryRepository
+public class CategoryAdapter : ICategoryRepository
 {
     private readonly DbContext _context;
 
-    public CategoryRepository(DbContext context)
+    public CategoryAdapter(DbContext context)
     {
         _context = context;
     }
 
-    public async Task<IEnumerable<CategoryDto>> GetAllAsync()
+    public async Task<IEnumerable<CategoryDto>> GetAllCategory()
     {
         var query = "SELECT id, name, description FROM Categories";
 
@@ -24,7 +24,7 @@ public class CategoryRepository : ICategoryRepository
         }
     }
 
-    public async Task<CategoryDto?> GetByIdAsync(int id)
+    public async Task<CategoryDto?> GetByIdCategory(int id)
     {
         var query = "SELECT id, name, description FROM Categories WHERE id = @id";
 
@@ -34,7 +34,7 @@ public class CategoryRepository : ICategoryRepository
         }
     }
 
-    public async Task<int> CreateAsync(CategoryDto dto)
+    public async Task<int> CreateCategory(CategoryDto dto)
     {
         var query = @"INSERT INTO Categories (name, description)
                       VALUES (@name, @description)";
@@ -45,7 +45,7 @@ public class CategoryRepository : ICategoryRepository
         }
     }
 
-    public async Task<int> UpdateAsync(CategoryDto dto)
+    public async Task<int> UpdateCategory(CategoryDto dto)
     {
         var query = @"UPDATE Categories
                       SET name = @name,
@@ -58,7 +58,7 @@ public class CategoryRepository : ICategoryRepository
         }
     }
 
-    public async Task<int> DeleteAsync(int id)
+    public async Task<int> DeleteCategory(int id)
     {
         var query = "DELETE FROM Categories WHERE id = @id";
 

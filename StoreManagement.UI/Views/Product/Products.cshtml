@@ -1,0 +1,270 @@
+﻿@using StoreManagement.Common.DTOs
+@using StoreManagement.Core.DTOs
+@model IEnumerable<ProductDto>
+
+@{
+    ViewData["Title"] = "Product Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <style>
+        .page-card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+        }
+    </style>
+}
+
+<div class="mb-4">
+    <h3 class="fw-semibold">
+        <i class="bi bi-box-seam text-primary me-2"></i>
+        Product Management
+    </h3>
+</div>
+
+<div class="page-card mb-4">
+    <div class="row g-3 align-items-end">
+
+        <input type="hidden" id="prodId" />
+
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Brand</label>
+            <select id="brandId" class="form-select">
+                <option value="">Select Brand</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Product Name</label>
+            <input type="text" id="prodName" class="form-control" placeholder="Enter product name" />
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label fw-semibold">Price</label>
+            <input type="number" id="price" class="form-control" placeholder="Price" />
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label fw-semibold">Size</label>
+            <input type="text" id="size" class="form-control" placeholder="Size" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Barcode</label>
+            <div class="input-group">
+                <input type="text" id="barcode" class="form-control" placeholder="Enter or Scan Barcode" />
+                <button class="btn btn-outline-primary" type="button" onclick="openScanner()">
+                    <i class="bi bi-upc-scan"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Description</label>
+            <input type="text" id="description" class="form-control" placeholder="Description" />
+        </div>
+
+        <div class="col-md-2">
+            <button id="saveBtn" class="btn btn-primary w-100" onclick="saveProduct()">
+                <i class="bi bi-save me-1"></i> Save
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<div class="page-card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Brand</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Size</th>
+                    <th>Barcode</th>
+                    <th>Description</th>
+                    <th class="text-center" style="width:120px;">Action</th>
+                </tr>
+            </thead>
+            <tbody id="productTable"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Scanner Modal -->
+<div id="scannerModal"
+     style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+            background:rgba(0,0,0,0.7);z-index:9999;justify-content:center;align-items:center;">
+
+    <div style="background:#fff;padding:15px;border-radius:10px;width:320px;">
+        <h6>Scan Barcode</h6>
+        <video id="cameraPreview" autoplay playsinline style="width:100%;border-radius:8px;"></video>
+        <button class="btn btn-danger w-100 mt-2" onclick="closeScanner()">Close</button>
+    </div>
+</div>
+
+<!-- ZXing Library -->
+<script src="https://unpkg.com/@@zxing/library@0.20.0"></script>
+
+@section Scripts {
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            loadProducts();
+            loadBrands();
+        });
+
+        function loadBrands() {
+            fetch('/Brand/GetAll')
+                .then(res => res.json())
+                .then(data => {
+                    let options = `<option value="">Select Brand</option>`;
+                    data.forEach(b => {
+                        options += `<option value="${b.id}">${b.name}</option>`;
+                    });
+                    document.getElementById("brandId").innerHTML = options;
+                });
+        }
+
+        function loadProducts() {
+            fetch('/Product/GetAll')
+                .then(res => res.json())
+                .then(data => {
+                    let rows = "";
+                    data.forEach(item => {
+                               rows += `
+        <tr>
+            <td>${item.id}</td>
+            <td>${item.brandName}</td>
+            <td>${item.name}</td>
+            <td>${item.price}</td>
+            <td>${item.size ?? ''}</td>
+            <td>${item.barcode ?? ''}</td>
+            <td>${item.description ?? ''}</td>
+
+            <td class="text-start">
+                <button class="btn btn-outline-warning btn-sm action-btn me-2"
+                    onclick="editProduct(${item.id})">
+                    <i class="bi bi-pencil"></i>
+                </button>
+
+                <button class="btn btn-outline-danger btn-sm action-btn"
+                    onclick="deleteProduct(${item.id})">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+        </tr>
+        `;
+                    });
+                    document.getElementById("productTable").innerHTML = rows;
+                });
+        }
+
+        function saveProduct() {
+
+            const dto = {
+                id: parseInt(document.getElementById("prodId").value) || 0,
+                brandId: parseInt(document.getElementById("brandId").value),
+                name: document.getElementById("prodName").value,
+                price: parseFloat(document.getElementById("price").value),
+                size: document.getElementById("size").value,
+                barcode: document.getElementById("barcode").value,
+                description: document.getElementById("description").value
+            };
+
+            fetch('/Product/Save', {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dto)
+            })
+            .then(res => res.json())
+            .then(data => {
+                      Swal.fire({
+            icon: 'success',
+            title: 'Scanned!',
+            text: 'Saved Successfully',
+            timer: 1500,
+            showConfirmButton: false
+        });
+                loadProducts();
+            });
+        }
+
+        function deleteProduct(id) {
+            fetch('/Product/Delete?id=' + id, { method: "DELETE" })
+            .then(() => loadProducts());
+        }
+
+
+        function editProduct(id){
+            fetch('/Product/GetAll')
+            .then(res => res.json())
+            .then(data=>{
+                const item= data.find(p=> p.id ==id);
+                if(item){
+                    document.getElementById("prodId").value =item.id;
+                    document.getElementById("brandId").value = item.brandId;
+                document.getElementById("prodName").value = item.name;
+                document.getElementById("price").value = item.price;
+                document.getElementById("size").value = item.size;
+                document.getElementById("barcode").value = item.barcode;
+                document.getElementById("description").value = item.description;
+
+                document.getElementById("saveBtn").innerText = "Update";
+                
+                }
+            });
+        }
+        
+
+        let codeReader = new ZXing.BrowserMultiFormatReader();
+
+        function openScanner() {
+
+            document.getElementById("scannerModal").style.display = "flex";
+
+            codeReader.decodeFromVideoDevice(null, "cameraPreview", (result, err) => {
+
+                if (result) {
+
+                    document.getElementById("barcode").value = result.text;
+
+                           Swal.fire({
+            icon: 'success',
+            title: 'Scanned!',
+            text: 'Barcode scanned successfully',
+            timer: 1500,
+            showConfirmButton: false
+        });
+
+                    closeScanner();
+                    codeReader.reset();
+                }
+            });
+        }
+
+        function closeScanner() {
+            codeReader.reset();
+            document.getElementById("scannerModal").style.display = "none";
+        }
+
+    </script>
+}

@@ -22,8 +22,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddSingleton<DbContext>();
 builder.Services.AddScoped<IAuthentication, AuthenticationAdapter>();
 builder.Services.AddSingleton<StoreManagement.Common.DapperContext.DbContext>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryAdapter>();
+builder.Services.AddScoped<IBrandRepository, BrandAdapter>();
+builder.Services.AddScoped<IProductRepository, ProductAdapter>();
 
 var app = builder.Build();
 

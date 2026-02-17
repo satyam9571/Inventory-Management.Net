@@ -2264,11 +2264,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Kumar Satyam\\Downloads\\StoreManagement_Updated\\StoreManagement.UI\\StoreManagement.UI.csproj",
+      "projectUniqueName": "D:\\Personal\\StoreManagement_Updated\\StoreManagement.UI\\StoreManagement.UI.csproj",
       "projectName": "StoreManagement.UI",
-      "projectPath": "C:\\Users\\Kumar Satyam\\Downloads\\StoreManagement_Updated\\StoreManagement.UI\\StoreManagement.UI.csproj",
+      "projectPath": "D:\\Personal\\StoreManagement_Updated\\StoreManagement.UI\\StoreManagement.UI.csproj",
       "packagesPath": "C:\\Users\\Kumar Satyam\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Kumar Satyam\\Downloads\\StoreManagement_Updated\\StoreManagement.UI\\obj\\",
+      "outputPath": "D:\\Personal\\StoreManagement_Updated\\StoreManagement.UI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2289,11 +2289,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\Kumar Satyam\\Downloads\\StoreManagement_Updated\\StoreManagement.BAL\\StoreManagement.BAL.csproj": {
-              "projectPath": "C:\\Users\\Kumar Satyam\\Downloads\\StoreManagement_Updated\\StoreManagement.BAL\\StoreManagement.BAL.csproj"
+            "D:\\Personal\\StoreManagement_Updated\\StoreManagement.BAL\\StoreManagement.BAL.csproj": {
+              "projectPath": "D:\\Personal\\StoreManagement_Updated\\StoreManagement.BAL\\StoreManagement.BAL.csproj"
             },
-            "C:\\Users\\Kumar Satyam\\Downloads\\StoreManagement_Updated\\StoreManagement.Common\\StoreManagement.Common.csproj": {
-              "projectPath": "C:\\Users\\Kumar Satyam\\Downloads\\StoreManagement_Updated\\StoreManagement.Common\\StoreManagement.Common.csproj"
+            "D:\\Personal\\StoreManagement_Updated\\StoreManagement.Common\\StoreManagement.Common.csproj": {
+              "projectPath": "D:\\Personal\\StoreManagement_Updated\\StoreManagement.Common\\StoreManagement.Common.csproj"
             }
           }
         }

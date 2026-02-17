@@ -22,3 +22,17 @@ C:\Users\Kumar Satyam\Downloads\StoreManagement_Updated\StoreManagement.Common\o
 C:\Users\Kumar Satyam\Downloads\StoreManagement_Updated\StoreManagement.Common\obj\Debug\net8.0\refint\StoreManagement.Common.dll
 C:\Users\Kumar Satyam\Downloads\StoreManagement_Updated\StoreManagement.Common\obj\Debug\net8.0\StoreManagement.Common.pdb
 C:\Users\Kumar Satyam\Downloads\StoreManagement_Updated\StoreManagement.Common\obj\Debug\net8.0\ref\StoreManagement.Common.dll
+C:\Users\Kumar Satyam\Downloads\StoreManagement_Updated\StoreManagement.Common\obj\Debug\net8.0\StoreManagement.Common.sourcelink.json
+D:\Personal\StoreManagement_Updated\StoreManagement.Common\bin\Debug\net8.0\StoreManagement.Common.deps.json
+D:\Personal\StoreManagement_Updated\StoreManagement.Common\bin\Debug\net8.0\StoreManagement.Common.dll
+D:\Personal\StoreManagement_Updated\StoreManagement.Common\bin\Debug\net8.0\StoreManagement.Common.pdb
+D:\Personal\StoreManagement_Updated\StoreManagement.Common\obj\Debug\net8.0\StoreManagement.Common.csproj.AssemblyReference.cache
+D:\Personal\StoreManagement_Updated\StoreManagement.Common\obj\Debug\net8.0\StoreManagement.Common.GeneratedMSBuildEditorConfig.editorconfig
+D:\Personal\StoreManagement_Updated\StoreManagement.Common\obj\Debug\net8.0\StoreManagement.Common.AssemblyInfoInputs.cache
+D:\Personal\StoreManagement_Updated\StoreManagement.Common\obj\Debug\net8.0\StoreManagement.Common.AssemblyInfo.cs
+D:\Personal\StoreManagement_Updated\StoreManagement.Common\obj\Debug\net8.0\StoreManagement.Common.csproj.CoreCompileInputs.cache
+D:\Personal\StoreManagement_Updated\StoreManagement.Common\obj\Debug\net8.0\StoreManagement.Common.sourcelink.json
+D:\Personal\StoreManagement_Updated\StoreManagement.Common\obj\Debug\net8.0\StoreManagement.Common.dll
+D:\Personal\StoreManagement_Updated\StoreManagement.Common\obj\Debug\net8.0\refint\StoreManagement.Common.dll
+D:\Personal\StoreManagement_Updated\StoreManagement.Common\obj\Debug\net8.0\StoreManagement.Common.pdb
+D:\Personal\StoreManagement_Updated\StoreManagement.Common\obj\Debug\net8.0\ref\StoreManagement.Common.dll

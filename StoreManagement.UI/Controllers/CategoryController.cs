@@ -21,7 +21,7 @@ public class CategoryController : Controller
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var data = await _repository.GetAllAsync();
+        var data = await _repository.GetAllCategory();
         return Json(data);
     }
 
@@ -30,9 +30,9 @@ public class CategoryController : Controller
     public async Task<IActionResult> Save([FromBody] CategoryDto dto)
     {
         if (dto.id == 0)
-            await _repository.CreateAsync(dto);
+            await _repository.CreateCategory(dto);
         else
-            await _repository.UpdateAsync(dto);
+            await _repository.UpdateCategory(dto);
 
         return Json(new { success = true });
     }
@@ -41,7 +41,7 @@ public class CategoryController : Controller
     [HttpDelete]
     public async Task<IActionResult> Delete(int id)
     {
-        await _repository.DeleteAsync(id);
+        await _repository.DeleteCategory(id);
         return Json(new { success = true });
     }
 }

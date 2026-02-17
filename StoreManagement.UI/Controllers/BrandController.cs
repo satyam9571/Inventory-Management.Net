@@ -21,7 +21,7 @@ namespace StoreManagement.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var data = await _brandRepository.GetAllAsync();
+            var data = await _brandRepository.GetAllBrand();
             return Json(data);
         }
 
@@ -29,16 +29,16 @@ namespace StoreManagement.UI.Controllers
         public async Task<IActionResult> Save([FromBody] BrandDto dto)
         {
             if (dto.id == 0)
-                await _brandRepository.CreateAsync(dto);
+                await _brandRepository.CreateBrand(dto);
             else
-                await _brandRepository.UpdateAsync(dto);
+                await _brandRepository.UpdateBrand(dto);
 
             return Json(new { success = true });
         }
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            await _brandRepository.DeleteAsync(id);
+            await _brandRepository.DeleteBrand(id);
             return Json(new { success = true });
         }
     }

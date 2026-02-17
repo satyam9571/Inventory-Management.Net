@@ -9,41 +9,45 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = StoreManagement.UI
 build_property.RootNamespace = StoreManagement.UI
-build_property.ProjectDir = C:\Users\Kumar Satyam\Downloads\StoreManagement_Updated\StoreManagement.UI\
+build_property.ProjectDir = D:\Personal\StoreManagement_Updated\StoreManagement.UI\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Kumar Satyam\Downloads\StoreManagement_Updated\StoreManagement.UI
+build_property.MSBuildProjectDirectory = D:\Personal\StoreManagement_Updated\StoreManagement.UI
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/Kumar Satyam/Downloads/StoreManagement_Updated/StoreManagement.UI/Views/Brand/brands.cshtml]
+[D:/Personal/StoreManagement_Updated/StoreManagement.UI/Views/Brand/brands.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRcYnJhbmRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Kumar Satyam/Downloads/StoreManagement_Updated/StoreManagement.UI/Views/Category/Index.cshtml]
+[D:/Personal/StoreManagement_Updated/StoreManagement.UI/Views/Category/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Kumar Satyam/Downloads/StoreManagement_Updated/StoreManagement.UI/Views/Home/Login.cshtml]
+[D:/Personal/StoreManagement_Updated/StoreManagement.UI/Views/Home/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Kumar Satyam/Downloads/StoreManagement_Updated/StoreManagement.UI/Views/Home/Signup.cshtml]
+[D:/Personal/StoreManagement_Updated/StoreManagement.UI/Views/Home/Signup.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWdudXAuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Kumar Satyam/Downloads/StoreManagement_Updated/StoreManagement.UI/Views/LandingPage/AdminDashboard.cshtml]
+[D:/Personal/StoreManagement_Updated/StoreManagement.UI/Views/LandingPage/AdminDashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGFuZGluZ1BhZ2VcQWRtaW5EYXNoYm9hcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Kumar Satyam/Downloads/StoreManagement_Updated/StoreManagement.UI/Views/LandingPage/Index.cshtml]
+[D:/Personal/StoreManagement_Updated/StoreManagement.UI/Views/LandingPage/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGFuZGluZ1BhZ2VcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Kumar Satyam/Downloads/StoreManagement_Updated/StoreManagement.UI/Views/Shared/_Layout.cshtml]
+[D:/Personal/StoreManagement_Updated/StoreManagement.UI/Views/Product/Products.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxQcm9kdWN0cy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Personal/StoreManagement_Updated/StoreManagement.UI/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

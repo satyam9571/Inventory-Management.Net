@@ -2223,11 +2223,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Kumar Satyam\\Downloads\\StoreManagement_Updated\\StoreManagement.Common\\StoreManagement.Common.csproj",
+      "projectUniqueName": "D:\\Personal\\StoreManagement_Updated\\StoreManagement.Common\\StoreManagement.Common.csproj",
       "projectName": "StoreManagement.Common",
-      "projectPath": "C:\\Users\\Kumar Satyam\\Downloads\\StoreManagement_Updated\\StoreManagement.Common\\StoreManagement.Common.csproj",
+      "projectPath": "D:\\Personal\\StoreManagement_Updated\\StoreManagement.Common\\StoreManagement.Common.csproj",
       "packagesPath": "C:\\Users\\Kumar Satyam\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Kumar Satyam\\Downloads\\StoreManagement_Updated\\StoreManagement.Common\\obj\\",
+      "outputPath": "D:\\Personal\\StoreManagement_Updated\\StoreManagement.Common\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

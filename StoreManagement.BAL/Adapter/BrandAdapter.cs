@@ -5,16 +5,16 @@ using StoreManagement.Common.DTOs;
 
 namespace StoreManagement.BAL.Adapter
 {
-    public class BrandRepository : IBrandRepository
+    public class BrandAdapter : IBrandRepository
     {
         private readonly DbContext _context;
 
-        public BrandRepository(DbContext context)
+        public BrandAdapter(DbContext context)
         {
             _context = context;
         }
 
-        public async Task<int> CreateAsync(BrandDto dto)
+        public async Task<int> CreateBrand(BrandDto dto)
         {
             var query = @"INSERT INTO brands (name, category_id)
                           VALUES (@name, @category_id)";
@@ -25,7 +25,7 @@ namespace StoreManagement.BAL.Adapter
             }
         }
 
-        public async Task<int> UpdateAsync(BrandDto dto)
+        public async Task<int> UpdateBrand(BrandDto dto)
         {
             var query = @"UPDATE brands
                           SET name = @name,
@@ -38,7 +38,7 @@ namespace StoreManagement.BAL.Adapter
             }
         }
 
-        public async Task<int> DeleteAsync(int id)
+        public async Task<int> DeleteBrand(int id)
         {
             var query = "DELETE FROM brands WHERE id = @id";
 
@@ -48,7 +48,7 @@ namespace StoreManagement.BAL.Adapter
             }
         }
 
-        public async Task<IEnumerable<BrandDto>> GetAllAsync()
+        public async Task<IEnumerable<BrandDto>> GetAllBrand()
         {
             var query = "SELECT id, name, category_id FROM brands";
 
@@ -58,7 +58,7 @@ namespace StoreManagement.BAL.Adapter
             }
         }
 
-        public async Task<BrandDto?> GetByIdAsync(int id)
+        public async Task<BrandDto?> GetByIdBrand(int id)
         {
             var query = "SELECT id, name, category_id FROM brands WHERE id = @id";
 

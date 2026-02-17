@@ -5,10 +5,10 @@ namespace StoreManagement.BAL.Interfaces
 {
     public interface IBrandRepository
     {
-        Task<IEnumerable<BrandDto>> GetAllAsync();
-        Task<BrandDto?> GetByIdAsync(int id);
-        Task<int> CreateAsync(BrandDto dto);
-        Task<int> UpdateAsync(BrandDto dto);
-        Task<int> DeleteAsync(int id);
+        Task<IEnumerable<BrandDto>> GetAllBrand();
+        Task<BrandDto?> GetByIdBrand(int id);
+        Task<int> CreateBrand(BrandDto dto);
+        Task<int> UpdateBrand(BrandDto dto);
+        Task<int> DeleteBrand(int id);
     }
 }
