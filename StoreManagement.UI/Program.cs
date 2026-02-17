@@ -25,6 +25,7 @@ builder.Services.AddSingleton<StoreManagement.Common.DapperContext.DbContext>();
 builder.Services.AddScoped<ICategoryRepository, CategoryAdapter>();
 builder.Services.AddScoped<IBrandRepository, BrandAdapter>();
 builder.Services.AddScoped<IProductRepository, ProductAdapter>();
+builder.Services.AddScoped<IStockEntryRepository, StockEntryAdapter>();
 
 var app = builder.Build();
 

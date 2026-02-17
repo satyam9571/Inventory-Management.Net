@@ -1,0 +1,328 @@
+﻿@model IEnumerable<StoreManagement.Common.DTOs.StockEntryDto>
+
+@{
+    ViewData["Title"] = "Stock Entries Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Store Management</title>
+
+    <!-- Bootstrap 5.3 + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- DataTables -->
+    <link href="https://cdn.datatables.net/2.3.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/responsive/3.0.3/css/responsive.bootstrap5.min.css" rel="stylesheet">
+
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        :root {
+            --vz-primary: #405189;
+            --vz-primary-rgb: 64, 81, 137;
+            --vz-success: #0ab39c;
+            --vz-success-rgb: 10, 179, 156;
+            --vz-danger: #f06548;
+            --vz-light: #f3f6f9;
+            --vz-body-bg: #f3f6f9;
+            --vz-card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(-45deg, #e3f2fd, #bbdefb, #90caf9, #64b5f6);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #364a63;
+            min-height: 100vh;
+        }
+        @@keyframes gradientBG {
+            0%
+
+        {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.10);
+            transition: all 0.35s ease;
+            overflow: hidden;
+            background: var(--vz-card-bg);
+        }
+
+        .table thead th {
+            background-color: rgba(var(--vz-primary-rgb), 0.06);
+            color: var(--vz-primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.4px;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--vz-primary), #5a73d8);
+            color: white;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-5">
+        <div class="d-flex justify-content-between align-items-center mb-5 header-section flex-wrap gap-3">
+            <h1 class="mb-0">Stock Entries Management</h1>
+            <button type="button" class="btn btn-success btn-lg" id="btnCreateNew">
+                <i class="bi bi-plus-circle me-1"></i> Add New Stock Entry
+            </button>
+        </div>
+
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table id="stockTable" class="table table-hover table-bordered mb-0" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Product ID</th>
+                                <th>Quantity</th>
+                                <th>Entry Type</th>
+                                <th>Entry Date</th>
+                                <th>Unit Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Modal -->
+    <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createModalLabel">Add New Stock Entry</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="createModalBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Stock Entry</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="editModalBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.datatables.net/2.3.7/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.3/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.3/js/responsive.bootstrap5.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var table = $('#stockTable').DataTable({
+                processing: true,
+                serverSide: false,
+                ajax: {
+                    url: "@Url.Action("GetAll", "StockEntries")",
+                     dataSrc: "data"
+                },
+                columns: [
+                    { data: "id" },
+                    { data: "productId" },
+                    { data: "quantity" },
+                    { data: "entryType" },
+                    {
+                        data: "entryDate",
+                        render: function (data) {
+                            return data ? new Date(data).toLocaleString('en-IN') : '';
+                        }
+                    },
+                    {
+                        data: "unitPrice",
+                        render: function (data) {
+                            return '₹' + Number(data).toFixed(2);
+                        }
+                    },
+                    {
+                        data: "id",
+                        orderable: false,
+                        searchable: false,
+                        render: function (data) {
+                            return `
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-warning edit-btn" data-id="${data}">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    <button class="btn btn-danger delete-btn" data-id="${data}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            `;
+                        }
+                    }
+                ],
+                order: [[0, 'desc']],
+                pageLength: 10,
+                lengthMenu: [5, 10, 25, 50]
+            });
+
+            // Create New
+            $('#btnCreateNew').on('click', function () {
+                $.ajax({
+                    url: '@Url.Action("Create", "StockEntries")',
+                    type: 'GET',
+                    success: function (data) {
+                        $('#createModalBody').html(data);
+                        $('#createModal').modal('show');
+                        $.validator.unobtrusive.parse('#createForm');
+
+                        $('#createForm').off('submit').on('submit', function (e) {
+                            e.preventDefault();
+                            $.ajax({
+                                url: '@Url.Action("Create", "StockEntries")',
+                                type: 'POST',
+                                data: $(this).serialize(),
+                                success: function (res) {
+                                    if (res.success) {
+                                        table.row.add(res.data).draw(false);
+                                        Swal.fire('Success!', 'Entry created', 'success');
+                                        $('#createModal').modal('hide');
+                                    } else {
+                                        $('#createModalBody').html(res);
+                                        $.validator.unobtrusive.parse('#createForm');
+                                    }
+                                },
+                                error: function (xhr) {
+                                    Swal.fire('Error', 'Failed to create entry: ' + (xhr.responseJSON?.message || 'Server error'), 'error');
+                                }
+                            });
+                        });
+                    },
+                    error: function (xhr) {
+                        Swal.fire('Error', 'Cannot load create form: ' + (xhr.status + ' ' + xhr.statusText), 'error');
+                    }
+                });
+            });
+
+            // Edit
+            $('#stockTable tbody').on('click', '.edit-btn', function () {
+                var id = $(this).data('id');
+                var row = table.row($(this).closest('tr'));
+
+                $.ajax({
+                    url: '@Url.Action("Edit", "StockEntries")/' + id,
+                    type: 'GET',
+                    success: function (data) {
+                        $('#editModalBody').html(data);
+                        $('#editModal').modal('show');
+                        $.validator.unobtrusive.parse('#editForm');
+
+                        $('#editForm').off('submit').on('submit', function (e) {
+                            e.preventDefault();
+                            $.ajax({
+                                url: '@Url.Action("Edit", "StockEntries")',
+                                type: 'POST',
+                                data: $(this).serialize(),
+                                success: function (res) {
+                                    if (res.success) {
+                                        row.data(res.data).draw(false);
+                                        Swal.fire('Success!', 'Entry updated', 'success');
+                                        $('#editModal').modal('hide');
+                                    } else {
+                                        $('#editModalBody').html(res);
+                                        $.validator.unobtrusive.parse('#editForm');
+                                    }
+                                },
+                                error: function (xhr) {
+                                    Swal.fire('Error', 'Failed to update: ' + (xhr.responseJSON?.message || 'Server error'), 'error');
+                                }
+                            });
+                        });
+                    },
+                    error: function (xhr) {
+                        Swal.fire('Error', 'Cannot load edit form: ' + (xhr.status + ' ' + xhr.statusText), 'error');
+                    }
+                });
+            });
+
+            // Delete
+            $('#stockTable tbody').on('click', '.delete-btn', function () {
+                var id = $(this).data('id');
+                var row = table.row($(this).closest('tr'));
+
+                Swal.fire({
+                    title: 'Delete entry?',
+                    text: "This action cannot be undone!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '@Url.Action("Delete", "StockEntries")',
+                            type: 'POST',
+                            data: { id: id, __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val() },
+                            success: function (res) {
+                                if (res.success) {
+                                    row.remove().draw();
+                                    Swal.fire('Deleted!', 'Entry removed.', 'success');
+                                } else {
+                                    Swal.fire('Error', res.message || 'Failed to delete.', 'error');
+                                }
+                            },
+                            error: function (xhr) {
+                                Swal.fire('Error', 'Server error: ' + (xhr.responseJSON?.message || xhr.statusText), 'error');
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
