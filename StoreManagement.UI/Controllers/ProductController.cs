@@ -4,14 +4,14 @@ using StoreManagement.Common.DTOs;
 
 namespace StoreManagement.UI.Controllers
 {
-    public class ProductController:Controller
+    public class ProductController : Controller
     {
 
         private readonly IProductRepository _productRepository;
 
         public ProductController(IProductRepository productRepository)
         {
-           _productRepository = productRepository;
+            _productRepository = productRepository;
         }
         public IActionResult Products()
         {
@@ -36,7 +36,7 @@ namespace StoreManagement.UI.Controllers
                 await _productRepository.UpdateProduct(dto);
             }
 
-            return Json(new {succes= true});
+            return Json(new { succes = true });
         }
 
         [HttpDelete]

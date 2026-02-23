@@ -1,0 +1,268 @@
+﻿@using StoreManagement.Core.DTOs
+@model IEnumerable<SalesDto>
+
+@{
+    ViewData["Title"] = "Sales Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <style>
+        .page-card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+}
+
+<h3 class="mb-3">
+    <i class="bi bi-receipt text-primary me-2"></i> Sales Management
+</h3>
+
+<!-- ================= FORM ================= -->
+<div class="page-card mb-4">
+
+    <input type="hidden" id="saleId" />
+
+    <div class="row g-3">
+
+        <div class="col-md-3">
+            <label>Bill No</label>
+            @* <input type="text" id="billNo" class="form-control"> *@
+            <input type="text" id="billNo" class="form-control" readonly />
+        </div>
+
+        <div class="col-md-3">
+            <label>Sale Date</label>
+            <input type="date" id="saleDate" class="form-control">
+        </div>
+
+        <div class="col-md-3">
+            <label>Sub Total</label>
+            <input type="number" id="subTotal" class="form-control">
+        </div>
+
+        <div class="col-md-3">
+            <label>Discount Amount</label>
+            <input type="number" id="discountAmount" class="form-control">
+        </div>
+
+        <div class="col-md-3">
+            <label>Tax Amount</label>
+            <input type="number" id="taxAmount" class="form-control">
+        </div>
+
+        <div class="col-md-3">
+            <label>Grand Total</label>
+            <input type="number" id="grandTotal" class="form-control">
+        </div>
+
+       
+        <div class="col-md-3">
+            <label>Payment Mode</label>
+            <select id="paymentMode" class="form-select">
+                <option>Cash</option>
+                <option>UPI</option>
+                <option>Card</option>
+            </select>
+            
+        </div>
+
+        <div class="col-md-3">
+            <label>Payment Status</label>
+            @* <input type="text" id="paymentStatus" class="form-control"> *@
+            <select id="paymentStatus" class="form-select">
+                <option value="Paid">Paid</option>
+                <option value="Pending">Pending</option>
+                <option value="Partial">Partial</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label>Created At</label>
+            <input type="datetime-local" id="createdAt" class="form-control">
+        </div>
+
+        <div class="col-md-2 align-self-end">
+            <button class="btn btn-primary w-100" onclick="saveSale()">Save</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= TABLE ================= -->
+
+<div class="page-card">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Bill No</th>
+                    <th>Date</th>
+                    <th>SubTotal</th>
+                    <th>Discount</th>
+                    <th>Tax</th>
+                    <th>GrandTotal</th>
+                    <th>Payment Mode</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="salesTable"></tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+
+            document.addEventListener("DOMContentLoaded", function () {
+            loadSales();
+            setTodayDate();
+            generateBillNo();
+        });
+
+        function loadSales(){
+            fetch('/Sale/GetAll')
+            .then(res => res.json())
+            .then(data => {
+
+                let rows = "";
+
+                data.forEach(s => {
+                    rows += `
+                    <tr>
+                        <td>${s.saleId}</td>
+                        <td>${s.billNo}</td>
+                        <td>${s.saleDate.split('T')[0]}</td>
+                        <td>${s.subTotal}</td>
+                        <td>${s.discountAmount}</td>
+                        <td>${s.taxAmount}</td>
+                        <td>${s.grandTotal}</td>
+                        <td>${s.paymentMode}</td>
+                        <td>${s.paymentStatus}</td>
+                        <td>${s.createdAt}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm"
+                                onclick="editSale(${s.saleId})">Edit</button>
+
+                            <button class="btn btn-danger btn-sm"
+                                onclick="deleteSale(${s.saleId})">Delete</button>
+                        </td>
+                    </tr>`;
+                });
+
+                document.getElementById("salesTable").innerHTML = rows;
+            });
+        }
+
+        // ================= SAVE =================
+        function saveSale(){
+
+            const dto = {
+                saleId: parseInt(document.getElementById("saleId").value) || 0,
+                billNo: document.getElementById("billNo").value,
+                saleDate: document.getElementById("saleDate").value,
+                subTotal: parseFloat(document.getElementById("subTotal").value) || 0,
+                discountAmount: parseFloat(document.getElementById("discountAmount").value) || 0,
+                taxAmount: parseFloat(document.getElementById("taxAmount").value) || 0,
+                grandTotal: parseFloat(document.getElementById("grandTotal").value) || 0,
+                paymentMode: document.getElementById("paymentMode").value,
+                paymentStatus: document.getElementById("paymentStatus").value,
+                createdAt: document.getElementById("createdAt").value
+
+            };
+
+            fetch('/Sale/Save',{
+                method:'POST',
+                headers:{ 'Content-Type':'application/json' },
+                body: JSON.stringify(dto)
+            })
+            .then(res => res.json())
+            .then(r => {
+                if(r.success){
+                Swal.fire("Success", r.message, "success");
+                }
+                else{
+                    Swal.fire("Error",r.message,"error");
+                }
+                
+                clearForm();
+                loadSales();
+            });
+        }
+
+        // ================= EDIT =================
+        function editSale(id){
+            fetch('/Sale/GetById?id=' + id)
+            .then(res => res.json())
+            .then(s => {
+
+                document.getElementById("saleId").value = s.saleId;
+                document.getElementById("billNo").value = s.billNo;
+                document.getElementById("saleDate").value = s.saleDate.split('T')[0];
+                document.getElementById("subTotal").value = s.subTotal;
+                document.getElementById("discountAmount").value = s.discountAmount;
+                document.getElementById("taxAmount").value = s.taxAmount;
+                document.getElementById("grandTotal").value = s.grandTotal;
+                document.getElementById("paymentMode").value = s.paymentMode;
+                document.getElementById("paymentStatus").value = s.paymentStatus;
+                document.getElementById("createdAt").value = s.createdAt.replace(' ','T');
+
+            });
+        }
+
+        // ================= DELETE =================
+        function deleteSale(id){
+
+            Swal.fire({
+                title: "Are you sure?",
+                icon: "warning",
+                showCancelButton: true
+            }).then(r => {
+
+                if(r.isConfirmed){
+                    fetch('/Sale/Delete?id=' + id, { method:'DELETE' })
+                    .then(res => res.json())
+                    .then(() => {
+                        Swal.fire("Deleted","Record deleted","success");
+                        loadSales();
+                    });
+                }
+
+            });
+        }
+                function setTodayDate(){
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById("saleDate").value = today;
+        }
+
+        function generateBillNo(){
+            fetch('/Sale/GenerateBillNo')
+            .then(res=>res.json())
+            .then(no=>{
+                document.getElementById("billNo").value = no;
+            });
+        }
+
+        // ================= CLEAR =================
+        function clearForm(){
+            document.querySelectorAll("input").forEach(x => x.value = "");
+        }
+
+    </script>
+}

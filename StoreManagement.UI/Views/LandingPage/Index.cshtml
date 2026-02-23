@@ -15,137 +15,137 @@
 
     <style>
         :root {
-        --vz-primary: #405189;
-        --vz-primary-rgb: 64, 81, 137;
-        --vz-secondary: #74788d;
-        --vz-success: #0ab39c;
-        --vz-info: #0ea5e9;
-        --vz-warning: #f4b731;
-        --vz-danger: #f06548;
-        --vz-light: #f3f6f9;
-        --vz-dark: #212529;
-        --vz-body-bg: #f3f6f9;
-        --vz-card-bg: #ffffff;
+            --vz-primary: #405189;
+            --vz-primary-rgb: 64, 81, 137;
+            --vz-secondary: #74788d;
+            --vz-success: #0ab39c;
+            --vz-info: #0ea5e9;
+            --vz-warning: #f4b731;
+            --vz-danger: #f06548;
+            --vz-light: #f3f6f9;
+            --vz-dark: #212529;
+            --vz-body-bg: #f3f6f9;
+            --vz-card-bg: #ffffff;
         }
 
         [data-bs-theme="dark"] {
-        --vz-body-bg: #0f1419;
-        --vz-card-bg: #1c2431;
-        --vz-secondary: #a1a9bd;
+            --vz-body-bg: #0f1419;
+            --vz-card-bg: #1c2431;
+            --vz-secondary: #a1a9bd;
         }
 
         body {
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        background-color: var(--vz-body-bg);
-        color: #364a63;
-        min-height: 100vh;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--vz-body-bg);
+            color: #364a63;
+            min-height: 100vh;
         }
 
         .card {
-        border: none;
-        border-radius: 10px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-        transition: all 0.25s ease;
-        overflow: hidden;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            transition: all 0.25s ease;
+            overflow: hidden;
         }
 
-        .card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
+            .card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            }
 
         .workspace-tile, .quick-tile {
-        display: block;
-        text-decoration: none;
-        color: inherit;
-        height: 100%;
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            height: 100%;
         }
 
-        .workspace-tile .card-body,
-        .quick-tile .card-body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 1.75rem 1rem;
-        transition: all 0.3s ease;
-        }
+            .workspace-tile .card-body,
+            .quick-tile .card-body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding: 1.75rem 1rem;
+                transition: all 0.3s ease;
+            }
 
-        .workspace-tile:hover .card-body,
-        .quick-tile:hover .card-body {
-        background: linear-gradient(135deg, rgba(var(--vz-primary-rgb), 0.08), rgba(var(--vz-primary-rgb), 0.03));
-        }
+            .workspace-tile:hover .card-body,
+            .quick-tile:hover .card-body {
+                background: linear-gradient(135deg, rgba(var(--vz-primary-rgb), 0.08), rgba(var(--vz-primary-rgb), 0.03));
+            }
 
         .icon-wrap, .quick-icon {
-        width: 64px;
-        height: 64px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 12px;
-        font-size: 1.75rem;
-        margin-bottom: 1rem;
-        transition: all 0.3s ease;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
         }
 
         .workspace-tile:hover .icon-wrap,
         .quick-tile:hover .quick-icon {
-        transform: scale(1.12) rotate(5deg);
+            transform: scale(1.12) rotate(5deg);
         }
 
         .workspace-title {
-        font-weight: 600;
-        font-size: 1.05rem;
-        margin: 0;
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin: 0;
         }
 
         .quick-tile .card-body div:last-child {
-        font-weight: 500;
-        font-size: 1rem;
-        margin-top: 0.75rem;
+            font-weight: 500;
+            font-size: 1rem;
+            margin-top: 0.75rem;
         }
 
         .skeleton {
-        height: 180px;
-        border-radius: 10px;
-        background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
-        background-size: 200% 100%;
-        animation: loading 1.5s infinite;
+            height: 180px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
         }
 
         @@keyframes loading {
-        0% {
-        background-position: 200% 0;
-        }
+            0% {
+                background-position: 200% 0;
+            }
 
-        100% {
-        background-position: -200% 0;
-        }
+            100% {
+                background-position: -200% 0;
+            }
         }
 
         .hidden {
-        display: none !important;
+            display: none !important;
         }
 
         .header-border {
-        border-bottom: 1px solid rgba(0,0,0,0.07);
-        padding-bottom: 1.25rem;
-        margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(0,0,0,0.07);
+            padding-bottom: 1.25rem;
+            margin-bottom: 2rem;
         }
 
         h1, h2.fs-5 {
-        font-weight: 700;
-        color: #212529;
+            font-weight: 700;
+            color: #212529;
         }
 
         [data-bs-theme="dark"] h1,
         [data-bs-theme="dark"] h2.fs-5 {
-        color: #e9ecef;
+            color: #e9ecef;
         }
 
         .badge.bg-soft-primary {
-        background-color: rgba(var(--vz-primary-rgb), 0.15) !important;
+            background-color: rgba(var(--vz-primary-rgb), 0.15) !important;
         }
     </style>
 </head>
@@ -198,36 +198,11 @@
                     </div>
                 </a>
             </div>
-            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-                <a href="#" class="workspace-tile">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="icon-wrap" style="background: linear-gradient(135deg, #0ab39c22, #0ea5e922); color: var(--vz-success);">
-                                <i class="bi bi-box-arrow-up-right"></i>
-                            </div>
-                            <div class="workspace-title">Sales Reports</div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+
 
             <!-- Updated: renamed & linked to /Band -->
             <!-- Replace this tile -->
-            @if (User.IsInRole("Admin"))
-            {
-                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-                    <a href="@Url.Action("brands", "Brand")" class="workspace-tile">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <div class="icon-wrap" style="background: linear-gradient(135deg, #f4b73122, #f0654822); color: var(--vz-warning);">
-                                    <i class="bi bi-box-seam-fill"></i>
-                                </div>
-                                <div class="workspace-title">Brands</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            }
+           
             @if (User.IsInRole("Admin"))
             {
 
@@ -246,6 +221,21 @@
             }
             @if (User.IsInRole("Admin"))
             {
+                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                    <a href="@Url.Action("brands", "Brand")" class="workspace-tile">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="icon-wrap" style="background: linear-gradient(135deg, #f4b73122, #f0654822); color: var(--vz-warning);">
+                                    <i class="bi bi-box-seam-fill"></i>
+                                </div>
+                                <div class="workspace-title">Brands</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+            @* @if (User.IsInRole("Admin"))
+            {
 
                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                     <a href="@Url.Action("Products", "Product")" class="workspace-tile">
@@ -261,67 +251,97 @@
                 </div>
 
 
+            } *@
+          
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                    <a href="@Url.Action("Customers", "Customer")" class="workspace-tile">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="icon-wrap" style="background: linear-gradient(135deg, #f4b73122, #f0654822); color: var(--vz-warning);">
+                                    <i class="bi bi-box-seam-fill"></i>
+                                </div>
+                                <div class="workspace-title">Customer Management</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             }
-
-        <!-- Quick Starts -->
-        <h2 class="fs-5 fw-semibold mb-3 text-uppercase letter-spacing-1">Quick Starts</h2>
-        <div class="row g-4">
-            <div class="col-xl-3 col-lg-6">
-                <a href="#" class="quick-tile">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="quick-icon" style="background: linear-gradient(135deg, #0ab39c22, #0ab39c44); color: var(--vz-success);">
-                                <i class="bi bi-cash-coin"></i>
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                    <a href="@Url.Action("Suppliers", "Supplier")" class="workspace-tile">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="icon-wrap" style="background: linear-gradient(135deg, #f4b73122, #f0654822); color: var(--vz-warning);">
+                                    <i class="bi bi-box-seam-fill"></i>
+                                </div>
+                                <div class="workspace-title">Supplier Management</div>
                             </div>
-                            <div>Daily Earnings Overview</div>
                         </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-xl-3 col-lg-6">
-                <a href="#" class="quick-tile">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="quick-icon" style="background: linear-gradient(135deg, #f4b73122, #f4b73144); color: var(--vz-warning);">
-                                <i class="bi bi-gift-fill"></i>
+                    </a>
+                </div>
+            }
+            <!-- Quick Starts -->
+            <h2 class="fs-5 fw-semibold mb-3 text-uppercase letter-spacing-1">Quick Starts</h2>
+            <div class="row g-4">
+                <div class="col-xl-3 col-lg-6">
+                    <a href="@Url.Action("Sales","Sale")" class="quick-tile">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="quick-icon" style="background: linear-gradient(135deg, #0ab39c22, #0ab39c44); color: var(--vz-success);">
+                                    <i class="bi bi-cash-coin"></i>
+                                </div>
+                                <div>New Sale</div>
                             </div>
-                            <div>Promotions & Offers</div>
                         </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-xl-3 col-lg-6">
-                <a href="#" class="quick-tile">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="quick-icon" style="background: linear-gradient(135deg, #0ea5e922, #0ea5e944); color: var(--vz-info);">
-                                <i class="bi bi-people"></i>
+                    </a>
+                </div>
+                <div class="col-xl-3 col-lg-6">
+                    <a href="#" class="quick-tile">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="quick-icon" style="background: linear-gradient(135deg, #f4b73122, #f4b73144); color: var(--vz-warning);">
+                                    <i class="bi bi-gift-fill"></i>
+                                </div>
+                                <div>Pending Payments</div>
                             </div>
-                            <div>Customer Feedback</div>
                         </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-xl-3 col-lg-6">
-                <a href="#" class="quick-tile">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="quick-icon" style="background: linear-gradient(135deg, #f0654822, #f0654844); color: var(--vz-danger);">
-                                <i class="bi bi-receipt"></i>
+                    </a>
+                </div>
+                <div class="col-xl-3 col-lg-6">
+                    <a href="#" class="quick-tile">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="quick-icon" style="background: linear-gradient(135deg, #0ea5e922, #0ea5e944); color: var(--vz-info);">
+                                    <i class="bi bi-people"></i>
+                                </div>
+                                <div>Sale Done\Customer Attended</div>
                             </div>
-                            <div>Supplier Invoices</div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
+                <div class="col-xl-3 col-lg-6">
+                    <a href="#" class="quick-tile">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="quick-icon" style="background: linear-gradient(135deg, #f0654822, #f0654844); color: var(--vz-danger);">
+                                    <i class="bi bi-receipt"></i>
+                                </div>
+                                <div>Regular Credit Customer</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        setTimeout(() => {
-            document.getElementById("skel").classList.add("hidden");
-            document.getElementById("content").classList.remove("hidden");
-        }, 800);
-    </script>
+        <script>
+            setTimeout(() => {
+                document.getElementById("skel").classList.add("hidden");
+                document.getElementById("content").classList.remove("hidden");
+            }, 800);
+        </script>
 </body>
 </html>

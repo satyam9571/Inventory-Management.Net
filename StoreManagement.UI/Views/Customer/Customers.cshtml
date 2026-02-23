@@ -1,0 +1,288 @@
+﻿@using StoreManagement.Common.DTOs
+@using StoreManagement.Core.DTOs
+@model IEnumerable<CustomerDto>
+
+@{
+    ViewData["Title"] = "Customer Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <style>
+        .page-card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+        }
+    </style>
+}
+
+<!-- ================= HEADER ================= -->
+<div class="mb-4">
+    <h3 class="fw-semibold">
+        <i class="bi bi-people text-primary me-2"></i>
+        Customer Management
+    </h3>
+</div>
+
+<!-- ================= FORM ================= -->
+<div class="page-card mb-4">
+
+    <input type="hidden" id="customerId" />
+
+    <div class="row g-3">
+
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Customer Code</label>
+            <input type="text" id="customerCode" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Full Name</label>
+            <input type="text" id="fullName" class="form-control" />
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label fw-semibold">Phone</label>
+            <input type="text" id="phone" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Email</label>
+            <input type="email" id="email" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">City</label>
+            <input type="text" id="city" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">State</label>
+            <input type="text" id="state" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Address</label>
+            <input type="text" id="address" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Pin Code</label>
+            <input type="text" id="pinCode" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Customer Type</label>
+            <input type="text" id="customerType" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Notes</label>
+            <input type="text" id="notes" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">GST Number</label>
+            <input type="text" id="gst" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Credit Limit</label>
+            <input type="number" id="creditLimit" class="form-control" />
+        </div>
+
+        <div class="col-md-2 align-self-end">
+            <button type="button"
+                    id="saveBtn"
+                    class="btn btn-primary w-100"
+                    onclick="saveCustomer()">
+                <i class="bi bi-save"></i> Save
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= TABLE ================= -->
+<div class="page-card">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Code</th>
+                    <th>Full Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>City</th>
+                    <th>Pin Code</th>
+                    <th>Customer Type</th>
+                    <th>GST</th>
+                    <th style="width:120px;">Action</th>
+                </tr>
+            </thead>
+            <tbody id="customerTable"></tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            loadCustomers();
+        });
+
+        // ================= LOAD =================
+        function loadCustomers() {
+            fetch('/Customer/GetAll')
+                .then(res => res.json())
+                .then(data => {
+
+                    let rows = "";
+
+                    data.forEach(c => {
+                        rows += `
+                        <tr>
+                            <td>${c.customerId}</td>
+                            <td>${c.customerCode}</td>
+                            <td>${c.fullName}</td>
+                            <td>${c.phone}</td>
+                            <td>${c.email}</td>
+                            <td>${c.city}</td>
+                            <td>${c.pinCode ?? ''}</td>
+                            <td>${c.notes ?? ''}</td>
+                            <td>${c.customerType ?? ''}</td>
+                            <td>${c.gstNumber ?? ''}</td>
+                            <td>
+                                <button class="btn btn-outline-warning btn-sm action-btn me-1"
+                                    onclick="editCustomer(${c.customerId})">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+
+                                <button class="btn btn-outline-danger btn-sm action-btn"
+                                    onclick="deleteCustomer(${c.customerId})">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>`;
+                    });
+
+                    document.getElementById("customerTable").innerHTML = rows;
+                });
+        }
+
+        // ================= SAVE =================
+        function saveCustomer() {
+
+            const dto = {
+                customerId: parseInt(customerId.value) || 0,
+                customerCode: customerCode.value,
+                fullName: fullName.value,
+                phone: phone.value,
+                email: email.value,
+                address: address.value,
+                city: city.value,
+                state: state.value,
+                pinCode: pinCode.value,
+                notes: notes.value,
+                customerType: customerType.value,
+                gstNumber: gst.value,
+                creditLimit: parseFloat(creditLimit.value) || 0
+            };
+
+            fetch('/Customer/Save', {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dto)
+            })
+            .then(async res => {
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.message);
+                }
+
+                return data;
+            })
+            .then(res => {
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: res.message,
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+                clearForm();
+                loadCustomers();
+            })
+            .catch(err => {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: err.message
+                });
+
+            });
+
+        }
+
+        // ================= EDIT =================
+        function editCustomer(id) {
+
+            fetch('/Customer/GetById?id=' + id)
+                .then(res => res.json())
+                .then(c => {
+
+                    customerId.value = c.customerId;
+                    customerCode.value = c.customerCode;
+                    fullName.value = c.fullName;
+                    phone.value = c.phone;
+                    email.value = c.email;
+                    address.value = c.address;
+                    city.value = c.city;
+                    state.value = c.state;
+                    pinCode.value = c.pinCode;
+                    notes.value = c.notes;
+                    customerType.value = c.customerType;
+                    gst.value = c.gstNumber;
+                    creditLimit.value = c.creditLimit;
+
+                    saveBtn.innerText = "Update";
+                });
+        }
+
+        // ================= DELETE =================
+        function deleteCustomer(id) {
+
+            fetch('/Customer/Delete?id=' + id, { method: "DELETE" })
+                .then(() => loadCustomers());
+        }
+
+        // ================= CLEAR =================
+        function clearForm() {
+            document.querySelectorAll("input").forEach(x => x.value = "");
+            saveBtn.innerText = "Save";
+        }
+
+    </script>
+}
+

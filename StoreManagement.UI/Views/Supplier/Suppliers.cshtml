@@ -1,0 +1,325 @@
+﻿@using StoreManagement.Core.DTOs
+@model IEnumerable<SupplierDto>
+
+@{
+    ViewData["Title"] = "Supplier Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <style>
+        .page-card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+    </style>
+}
+
+<div class="mb-4">
+    <h3 class="fw-semibold">
+        <i class="bi bi-truck text-primary me-2"></i>
+        Supplier Management
+    </h3>
+</div>
+
+<div class="page-card mb-4">
+
+    <input type="hidden" id="supplierId" />
+
+    <div class="row g-3">
+
+        <div class="col-md-3">
+            <label>Supplier Code</label>
+            <input type="text" id="supplierCode" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label>Company Name</label>
+            <input type="text" id="companyName" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label>Contact Person</label>
+            <input type="text" id="contactPerson" class="form-control" />
+        </div>
+
+        <div class="col-md-2">
+            <label>Phone</label>
+            <input type="text" id="phone" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label>Email</label>
+            <input type="email" id="email" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label>City</label>
+            <input type="text" id="city" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label>State</label>
+            <input type="text" id="state" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label>Pin Code</label>
+            <input type="text" id="pinCode" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label>Address</label>
+            <input type="text" id="address" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label>GST Number</label>
+            <input type="text" id="gstNumber" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label>PAN Number</label>
+            <input type="text" id="panNumber" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label>Payment Terms</label>
+            <input type="text" id="paymentTerms" class="form-control" />
+        </div>
+
+        <div class="col-md-2">
+            <label>Lead Time (Days)</label>
+            <input type="number" id="leadTimeDays" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label>Minimum Order Value</label>
+            <input type="number" id="minimumOrderValue" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label>Credit Limit</label>
+            <input type="number" id="creditLimit" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label>Outstanding Balance</label>
+            <input type="number" id="outstandingBalance" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label>Notes</label>
+            <input type="text" id="notes" class="form-control" />
+        </div>
+
+        <div class="col-md-2">
+            <label>Active</label>
+            <select id="isActive" class="form-select">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+
+        <div class="col-md-2 align-self-end">
+            <button type="button" id="saveBtn"
+                    class="btn btn-primary w-100"
+                    onclick="saveSupplier()">
+                <i class="bi bi-save"></i> Save
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<div class="page-card">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Code</th>
+                    <th>Company</th>
+                    <th>Phone</th>
+                    <th>City</th>
+                    <th>GST</th>
+                    <th>Credit</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="supplierTable"></tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            loadSuppliers();
+        });
+
+        function loadSuppliers() {
+            fetch('/Supplier/GetAll')
+                .then(res => res.json())
+                .then(data => {
+
+                    let rows = "";
+
+                    data.forEach(s => {
+                        rows += `
+                        <tr>
+                            <td>${s.supplierId}</td>
+                            <td>${s.supplierCode}</td>
+                            <td>${s.companyName}</td>
+                            <td>${s.phone}</td>
+                            <td>${s.city}</td>
+                            <td>${s.gstNumber}</td>
+                            <td>${s.creditLimit}</td>
+                                    <td>
+                            <button class="btn btn-outline-warning btn-sm action-btn me-1"
+                                onclick="editSupplier(${s.supplierId})">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+
+                            <button class="btn btn-outline-danger btn-sm action-btn"
+                                onclick="deleteSupplier(${s.supplierId})">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+
+                        </tr>`;
+                    });
+
+                    document.getElementById("supplierTable").innerHTML = rows;
+                });
+        }
+
+        function saveSupplier() {
+
+            const dto = {
+                supplierId: parseInt(supplierId.value) || 0,
+                supplierCode: supplierCode.value,
+                companyName: companyName.value,
+                contactPerson: contactPerson.value,
+                phone: phone.value,
+                email: email.value,
+                address: address.value,
+                city: city.value,
+                state: state.value,
+                pinCode: pinCode.value,
+                gstNumber: gstNumber.value,
+                panNumber: panNumber.value,
+                paymentTerms: paymentTerms.value,
+                leadTimeDays: parseInt(leadTimeDays.value) || 0,
+                minimumOrderValue: parseFloat(minimumOrderValue.value) || 0,
+                creditLimit: parseFloat(creditLimit.value) || 0,
+                outstandingBalance: parseFloat(outstandingBalance.value) || 0,
+                notes: notes.value,
+                isActive: isActive.value === "true"
+            };
+
+            fetch('/Supplier/Save', {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dto)
+            })
+            .then(res => res.json())
+            .then(res => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: res.message,
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+                clearForm();
+                loadSuppliers();
+            });
+        }
+
+        function editSupplier(id) {
+
+            fetch('/Supplier/GetById?id=' + id)
+                .then(res => res.json())
+                .then(s => {
+
+                    supplierId.value = s.supplierId;
+                    supplierCode.value = s.supplierCode;
+                    companyName.value = s.companyName;
+                    contactPerson.value = s.contactPerson;
+                    phone.value = s.phone;
+                    email.value = s.email;
+                    address.value = s.address;
+                    city.value = s.city;
+                    state.value = s.state;
+                    pinCode.value = s.pinCode;
+                    gstNumber.value = s.gstNumber;
+                    panNumber.value = s.panNumber;
+                    paymentTerms.value = s.paymentTerms;
+                    leadTimeDays.value = s.leadTimeDays;
+                    minimumOrderValue.value = s.minimumOrderValue;
+                    creditLimit.value = s.creditLimit;
+                    outstandingBalance.value = s.outstandingBalance;
+                    notes.value = s.notes;
+                    isActive.value = s.isActive.toString();
+
+                    saveBtn.innerText = "Update";
+                });
+        }
+
+                function deleteSupplier(id) {
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This supplier will be deleted!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    fetch('/Supplier/Delete?id=' + id, {
+                        method: "DELETE"
+                    })
+                    .then(res => res.json())
+                    .then(() => {
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted',
+                            text: 'Supplier deleted successfully',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        loadSuppliers();
+                    });
+
+                }
+            });
+        }
+
+        function clearForm() {
+            document.querySelectorAll("input").forEach(x => x.value = "");
+            saveBtn.innerText = "Save";
+        }
+
+    </script>
+}

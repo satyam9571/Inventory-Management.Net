@@ -26,6 +26,9 @@ builder.Services.AddScoped<ICategoryRepository, CategoryAdapter>();
 builder.Services.AddScoped<IBrandRepository, BrandAdapter>();
 builder.Services.AddScoped<IProductRepository, ProductAdapter>();
 builder.Services.AddScoped<IStockEntryRepository, StockEntryAdapter>();
+builder.Services.AddScoped<ICustomerRepository, CustomerAdapter>();
+builder.Services.AddScoped<ISupplierRepository, SupplierAdapter>();
+builder.Services.AddScoped<ISaleRepository, SaleAdapter>();
 
 var app = builder.Build();
 

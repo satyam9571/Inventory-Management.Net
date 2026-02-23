@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Dapper;   
+﻿using Dapper;
 using StoreManagement.BAL.Interfaces;
-using StoreManagement.Common.DTOs;
 using StoreManagement.Common.DapperContext;
+using StoreManagement.Common.DTOs;
 
 namespace StoreManagement.BAL.Adapter
 {
@@ -17,79 +14,82 @@ namespace StoreManagement.BAL.Adapter
             _context = context;
         }
 
-        public async Task<IEnumerable<StockEntryDto>> GetAllAsync()
+        public async Task<string> AddStockByBarcodeAsync(StockEntryDto dto)
         {
             const string query = @"
-                SELECT TOP 1000 
-                    [id]            AS Id,
-                    [product_id]    AS ProductId,
-                    [quantity]      AS Quantity,
-                    [entry_type]    AS EntryType,
-                    [entry_date]    AS EntryDate,
-                    [unit_price]    AS UnitPrice
-                FROM stock_entries
-                ORDER BY [id] DESC";
+                     IF EXISTS (SELECT 1 FROM stock_entries1 WHERE barcode = @Barcode)
+            BEGIN
+                UPDATE stock_entries1
+                SET 
+                    quantity = quantity + @Stock,
+                    updated_at = GETDATE()
+                WHERE barcode = @Barcode;
 
-            using var connection = _context.CreateConnection();
-            return await connection.QueryAsync<StockEntryDto>(query);
-        }
-
-        public async Task<StockEntryDto?> GetByIdAsync(int id)
-        {
-            const string query = @"
-                SELECT 
-                    [id]            AS Id,
-                    [product_id]    AS ProductId,
-                    [quantity]      AS Quantity,
-                    [entry_type]    AS EntryType,
-                    [entry_date]    AS EntryDate,
-                    [unit_price]    AS UnitPrice
-                FROM stock_entries
-                WHERE [id] = @Id";
-
-            using var connection = _context.CreateConnection();
-            return await connection.QueryFirstOrDefaultAsync<StockEntryDto>(query, new { Id = id });
-        }
-
-        public async Task<int> AddAsync(StockEntryDto stockEntry)
-        {
-            const string query = @"
-                INSERT INTO stock_entries
+                SELECT 'UPDATED';
+            END
+            ELSE
+            BEGIN
+                INSERT INTO stock_entries1
                 (
-                    [product_id], [quantity], [entry_type], [entry_date], [unit_price]
+                    product_id,
+                    barcode,
+                    product_name,
+                    category,
+                    quantity,
+                    entry_type,
+                    entry_date,
+                    unit_price,
+                    sellingUnitPrice,
+                    created_at
                 )
                 VALUES
                 (
-                    @ProductId, @Quantity, @EntryType, @EntryDate, @UnitPrice
+                    @ProductId,
+                    @Barcode,
+                    @ProductName,
+                    @Category,
+                    @Stock,
+                    'PURCHASE',
+                    @EntryDate,
+                    @SellingUnit,
+                    @SellingUnit,
+                    GETDATE()
                 );
-                SELECT CAST(SCOPE_IDENTITY() AS int);";
+
+                SELECT 'INSERTED';
+            END
+
+                ";
+
 
             using var connection = _context.CreateConnection();
-            return await connection.QuerySingleAsync<int>(query, stockEntry);
+            return await connection.ExecuteScalarAsync<string>(query, dto);
         }
 
-        public async Task UpdateAsync(StockEntryDto stockEntry)
+        public async Task<StockEntryDto?> GetProductByBarcodeAsync(string barcode)
         {
             const string query = @"
-                UPDATE stock_entries
-                SET 
-                    [product_id]    = @ProductId,
-                    [quantity]      = @Quantity,
-                    [entry_type]    = @EntryType,
-                    [entry_date]    = @EntryDate,
-                    [unit_price]    = @UnitPrice
-                WHERE [id] = @Id";
+                    SELECT
+                        p.id        AS ProductId,
+                        p.barcode   AS Barcode,
+                        p.name      AS ProductName,
+                        c.name      AS Category,
+                        p.price     AS SellingUnit
+                    FROM products p
+                    INNER JOIN brands b
+                        ON p.brand_id = b.id
+                    INNER JOIN categories c
+                        ON b.category_id = c.id
+                    WHERE p.barcode = @Barcode;
+                ";
 
             using var connection = _context.CreateConnection();
-            await connection.ExecuteAsync(query, stockEntry);
+
+            return await connection.QueryFirstOrDefaultAsync<StockEntryDto>(
+                query,
+                new { Barcode = barcode }
+            );
         }
 
-        public async Task DeleteAsync(int id)
-        {
-            const string query = "DELETE FROM stock_entries WHERE [id] = @Id";
-
-            using var connection = _context.CreateConnection();
-            await connection.ExecuteAsync(query, new { Id = id });
-        }
     }
 }

@@ -8,11 +8,13 @@ namespace StoreManagement.Common.DTOs
 {
     public class StockEntryDto
     {
-        public int Id { get; set; }
         public int ProductId { get; set; }
-        public int Quantity { get; set; }
-        public string EntryType { get; set; } // e.g., "In" or "Out" – adjust if it's an enum
+        public string Barcode { get; set; }
+        public string ProductName { get; set; }
+        public string Category { get; set; }
+        public int Stock { get; set; }
         public DateTime EntryDate { get; set; }
-        public decimal UnitPrice { get; set; }
+        public decimal SellingUnit { get; set; }
+
     }
 }
